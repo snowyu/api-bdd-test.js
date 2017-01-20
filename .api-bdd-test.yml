@@ -1,0 +1,2 @@
+server: http://localhost:3000
+root: /api

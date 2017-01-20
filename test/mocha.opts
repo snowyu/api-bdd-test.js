@@ -1,0 +1,6 @@
+--compilers coffee:coffee-script/register
+--timeout 1000
+--ui bdd
+--growl
+--colors
+src/
