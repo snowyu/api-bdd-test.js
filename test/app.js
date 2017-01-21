@@ -24,19 +24,29 @@ module.exports = (function() {
     app.put('/api/bottle/:id', putBottle);
     app.patch('/api/bottle/:id', putBottle);
     app.delete('/api/bottle/:id', delBottle);
+    app.post('/api/Users/login/', login);
+    app.post('/api/Users/logout/', logout);
+
+    function login(req, res) {
+      res.send({id:'xxxx'})
+    }
+
+    function logout(req, res) {
+      res.sendStatus(204)
+    }
 
     function isBottleExists(req, res) {
       if (bottles[req.params.id])
-        res.send(200)
+        res.sendStatus(200)
       else
-        res.send(404)
+        res.sendStatus(404)
     }
 
     function getBottle(req, res) {
       if (bottles[req.params.id])
         res.send(bottles[req.params.id])
       else
-        res.send(404)
+        res.sendStatus(404)
     }
 
     function putBottle(req, res) {

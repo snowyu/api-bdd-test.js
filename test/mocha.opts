@@ -3,4 +3,5 @@
 --ui bdd
 --growl
 --colors
+test/setup.coffee
 src/
