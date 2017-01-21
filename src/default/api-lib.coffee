@@ -51,3 +51,26 @@ module.exports = (aDictionary)->
     else
       expect(testScope.result.status).to.be.equal status
     return
+
+  # Yadda can not support ignore case: /xxx/i
+  this.define /login\s+user:\s*$string\s*,\s*passw(?:or)?d:\s*$string/, (username, password)->
+    testScope = this.ctx
+    this.api.login
+      username: username
+      password: password
+    .then (res)=>
+      testScope.result = res
+      return
+    .catch (err)=>
+      testScope.result = err
+      return err
+
+  this.define /logout\s+user|(?:exit|quit)\s+system/, ->
+    testScope = this.ctx
+    this.api.logout()
+    .then (res)=>
+      testScope.result = res
+      return
+    .catch (err)=>
+      testScope.result = err
+      return err

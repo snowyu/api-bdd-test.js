@@ -106,3 +106,24 @@ module.exports = (aDictionary)->
         throw new Error 'Call isExists API Error:' + status
       return
 
+  this.define /登[录陆]\s*用户[:：]\s*$string\s*[,，]\s*密码[:：]\s*$string/, (username, password)->
+    testScope = this.ctx
+    this.api.login
+      username: username
+      password: password
+    .then (res)=>
+      testScope.result = res
+      return
+    .catch (err)=>
+      testScope.result = err
+      return err
+
+  this.define /注销用户|退出系统/, ->
+    testScope = this.ctx
+    this.api.logout()
+    .then (res)=>
+      testScope.result = res
+      return
+    .catch (err)=>
+      testScope.result = err
+      return err
