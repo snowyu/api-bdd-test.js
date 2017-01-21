@@ -21,3 +21,9 @@ Scenario: POST and Get result
   ----
 
   Given this is a general lib
+  Given login user:'test1',password:'123123'
+  Then The last status code should be: 200
+  Then logout user
+  Then The last status code should be: 204
+  Then exit system
+  Then quit system
