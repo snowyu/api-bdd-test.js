@@ -1,7 +1,7 @@
 {
   "name": "api-bdd-test",
   "description": "use the bdd(cucumber) to test the RESTfull API",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": {
     "name": "Riceball LEE",
     "email": "snowyu.lee@gmail.com",
@@ -64,10 +64,9 @@
     "inherits-ex": "^1.1.6",
     "js-yaml": "^3.7.0",
     "load-config-file": "^0.3.3",
-    "loopback-supertest": "^0.1.11",
+    "loopback-supertest": "^0.1.12",
     "require-all": "^2.1.0",
     "supertest": "^2.0.1",
-    "supertest-as-promised": "^4.0.2",
     "util-ex": "^0.3.15",
     "yadda": "^0.22.1"
   },
