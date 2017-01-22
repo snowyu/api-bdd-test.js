@@ -130,7 +130,7 @@ module.exports = (aDictionary)->
       return err
 
   # 记住结果的"body.id"到"myvar"
-  this.define /(?:记[住下忆]?|保[存留])结果的(?:属性)?$string到[:：]?$string/, (aKey, aToVar)->
+  this.define /(?:记[住下忆]?|保[存留])结果的$string(?:属性)?到[:：]?$string/, (aKey, aToVar)->
     vResult = this.ctx.result
     if aKey? and aKey.length and vResult?
       aKey = aKey.split '.'
