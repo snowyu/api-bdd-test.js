@@ -1,6 +1,7 @@
 isObject  = require 'util-ex/lib/is/type/object'
 isArray   = require 'util-ex/lib/is/type/array'
 path      = require 'path'
+cson      = require 'cson'
 
 module.exports = (aDictionary)->
   # `this` is the library.
@@ -74,3 +75,74 @@ module.exports = (aDictionary)->
     .catch (err)=>
       testScope.result = err
       return err
+
+  # keep the result of 'body.id' to 'myvar'
+  this.define /(?:keep|store|save)\s+(?:the\s+)?result\s+of\s+$string\s+(?:in)?to\s+$string/, (aKey, aToVar)->
+    vResult = this.ctx.result
+    if aKey? and aKey.length and vResult?
+      aKey = aKey.split '.'
+      for k in aKey
+        vResult = vResult[k] if vResult?
+    this.ctx[aToVar] = vResult
+    return
+
+  # keep the result to 'myvar'
+  this.define /(?:keep|store|save)\s+(?:the\s+)?result\s+(?:in)?to\s+$string/, (aToVar)->
+    this.ctx[aToVar] = this.ctx.result
+    return
+
+
+  # expect the stored "mvar" equal xxx
+  this.define /expect\s+(?:the\s+)(?:stored|kept|saved)\s+$string(?:\s+is|be|are|to)?\s+(not\s+)?(above|below|most|least|equa?l?|(?:include|contain)(?:\s+key)?|[><!]=|[<=>])\s*(.+)$/, (aKey, aNot, aOp, aValue)->
+    aValue = cson.parseCSONString aValue
+    myExpect = expect(this.ctx[aKey]).to.be
+    myExpect = myExpect.not if aNot?
+    switch aOp
+      when 'least', '>='
+        myExpect.least aValue
+      when 'most', '<='
+        myExpect.most aValue
+      when 'above', '>'
+        myExpect.above aValue
+      when 'below', '<'
+        myExpect.below aValue
+      when 'equal', 'equ', '='
+        myExpect.equal aValue
+      when  '!='
+        myExpect.not.equal aValue
+      else
+        if aOp.slice(aOp.length-3) is 'key'
+          myExpect.include.keys aValue
+        else
+          myExpect.include aValue
+    return
+
+  this.define /expect\s+(?:the\s+)(?:stored|kept|saved)\s+$string(?:\s+is|be|are|to)?\s+(not\s+)?(above|below|most|least|equa?l?|(?:include|contain)(?:\s+key)?|[><!]=|[<=>])[:]\n$object/, (aKey, aNot, aOp, aValue)->
+    myExpect = expect(this.ctx[aKey]).to.be
+    myExpect = myExpect.not if aNot?
+    switch aOp
+      when 'least', '>='
+        myExpect.least aValue
+      when 'most', '<='
+        myExpect.most aValue
+      when 'above', '>'
+        myExpect.above aValue
+      when 'below', '<'
+        myExpect.below aValue
+      when 'equal', 'equ', '='
+        myExpect.equal aValue
+      when '!='
+        myExpect.not.equal aValue
+      else
+        myExpect = myExpect.not if aOp[0] is 'n'
+        if aOp.slice(aOp.length-3) is 'key'
+          myExpect.include.keys aValue
+        else
+          myExpect.include aValue
+    return
+
+  this.define /expect\s+((?:not\s+)?exist)(?:the\s+)?(?:stored|kept|saved)\s+$string/, (aExists, aKey)->
+    if aExists[0] isnt 'n'
+      expect(this.ctx[aKey]).to.be.exist
+    else
+      expect(this.ctx[aKey]).not.to.be.exist

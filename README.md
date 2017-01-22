@@ -116,6 +116,10 @@ the genernal Chinese api steps:
 * `([不]?会?存在|没有?|有)(?:id|ID|编号)[为是:：]?$string的?资源\\s*[:：]?[(（]?$identifier(?:[)）]?\\s*[,，.。])?`
 * `/登[录陆]\s*用户[:：]\s*$string\s*[,，]\s*密码[:：]\s*$string/`
 * `/注销用户|退出系统/`
+* `/(?:记[住下忆]?|保[存留])结果的(?:属性)?$string到[:：]?$string/`
+* `记住结果到"myvar"`
+* `期望保存的"mvar"等于xxx`
+* `/[期希]望(不?存在)(?:记[住下忆]?|保[存留]的)?\s*$string$/`
 
 #### steps and libs
 
@@ -163,6 +167,11 @@ module.exports = function(dict){
   });
 }
 ```
+
+## limits
+
+* no back ref in regexp.
+* no optional group on `$xxx` defininition. eg, `$string?` should be wrong.
 
 ## History
 

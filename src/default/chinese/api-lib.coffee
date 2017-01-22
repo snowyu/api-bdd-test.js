@@ -1,5 +1,6 @@
 isObject  = require 'util-ex/lib/is/type/object'
 path      = require 'path'
+cson      = require 'cson'
 
 module.exports = (aDictionary)->
   # `this` is the library.
@@ -127,3 +128,68 @@ module.exports = (aDictionary)->
     .catch (err)=>
       testScope.result = err
       return err
+
+  # 记住结果的"body.id"到"myvar"
+  this.define /(?:记[住下忆]?|保[存留])结果的(?:属性)?$string到[:：]?$string/, (aKey, aToVar)->
+    vResult = this.ctx.result
+    if aKey? and aKey.length and vResult?
+      aKey = aKey.split '.'
+      for k in aKey
+        vResult = vResult[k] if vResult?
+    this.ctx[aToVar] = vResult
+    return
+
+  # 记住结果到"myvar"
+  this.define /(?:记[住下忆]?|保[存留])结果到[:：]?$string/, (aToVar)->
+    this.ctx[aToVar] = this.ctx.result
+    return
+
+  # 期望保留的"mvar"等于xxx
+  this.define /[期希]望(?:记[住下忆]?|保[存留])的\s*$string\s*(不)?((?:大于|小于)等于|至[少多]|等于|是|包[含括](?:key)?|[><!]=|[<=>])\s*(.+)$/, (aKey, aNot, aOp, aValue)->
+    aValue = cson.parseCSONString aValue
+    myExpect = expect(this.ctx[aKey]).to.be
+    myExpect = myExpect.not if aNot?
+    switch aOp
+      when '大于等于', '>=', '至少'
+        myExpect.least aValue
+      when '小于等于', '<=', '至多'
+        myExpect.most aValue
+      when '大于', '>'
+        myExpect.above aValue
+      when '小于', '<'
+        myExpect.below aValue
+      when '等于', '=', '是'
+        myExpect.equal aValue
+      else
+        if aOp.slice(aOp.length-3) is 'key'
+          myExpect.include.keys aValue
+        else
+          myExpect.include aValue
+    return
+
+  this.define /[期希]望(?:记[住下忆]?|保[存留])的\s*$string\s*(不)?((?:大于|小于)等于|至[少多]|等于|是|包[含括](?:key)?|[><!]=|[<=>])[:：]\n$object/, (aKey, aNot, aOp, aValue)->
+    myExpect = expect(this.ctx[aKey]).to.be
+    myExpect = myExpect.not if aNot?
+    switch aOp
+      when '大于等于', '>=', '至少'
+        myExpect.least aValue
+      when '小于等于', '<=', '至多'
+        myExpect.great aValue
+      when '大于', '>'
+        myExpect.above aValue
+      when '小于', '<'
+        myExpect.below aValue
+      when '等于', '=', '是'
+        myExpect.equal aValue
+      else
+        if aOp.slice(aOp.length-3) is 'key'
+          myExpect.include.keys aValue
+        else
+          myExpect.include aValue
+    return
+
+  this.define /[期希]望(不?存在)(?:记[住下忆]?|保[存留]的)?\s*$string$/, (aExists, aKey)->
+    if aExists[0] isnt '不'
+      expect(this.ctx[aKey]).to.be.exist
+    else
+      expect(this.ctx[aKey]).not.to.be.exist

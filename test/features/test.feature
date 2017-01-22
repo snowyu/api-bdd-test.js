@@ -24,6 +24,24 @@
     a:1
     b:2
     ----
+  并且 记住结果的"body.id"到"myid"
+  并且 记住结果到"myres"
+  并且 期望存在保留的"myid"
+  并且 期望存在"myres"
+  并且 期望不存在"myresxxx"
+  并且 期望保留的"myid">=1
+  并且 期望保留的"myid"不等于2
+  并且 期望保留的"myid"=1
+  并且 期望保留的"myres"包含:
+    ---
+      status:200
+    ---
+  并且 期望保留的"myres"包含key "status"
+  并且 期望保留的"myres"不包含key "adstatus"
+  并且 期望保留的"myres"包含key:
+    ---
+    "status"
+    ---
 
   那么 存在id为"1"的资源(bottle)
   当 删除id为"1"的资源(bottle)
