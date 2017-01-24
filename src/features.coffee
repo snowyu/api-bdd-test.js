@@ -130,7 +130,7 @@ module.exports = class Features
       yadda = Yadda.createInstance libraries, context
       scenarios feature.scenarios, (scenario)->
         steps scenario.steps, (step, done)->
-          # console.log('step',context.ctx)
+          testScope.context = context.ctx
           yadda.run(step, done)
 
   run: ->

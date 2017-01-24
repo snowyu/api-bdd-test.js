@@ -42,6 +42,12 @@
     ---
     "status"
     ---
+  并且 希望获得id为`myid`的资源(bottle)，其结果为
+    ----
+    id:`myid`
+    a:1
+    b:2
+    ----
 
   那么 存在id为"1"的资源(bottle)
   当 删除id为"1"的资源(bottle)

@@ -36,6 +36,13 @@ Scenario: POST and Get result
       "statusCode"
     ]
     ---
+  When GET `"bottle/#{myid}"`
+  Then The last status code should be: 200
+  Then The last result should be:
+  ----
+  id: 1
+  a: 1
+  ----
 
   Given this is a general lib
   Given login user:'test1',password:'123123'

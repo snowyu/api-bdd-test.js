@@ -1,6 +1,6 @@
 isObject  = require 'util-ex/lib/is/type/object'
 path      = require 'path'
-cson      = require 'cson'
+cs      = require 'coffee-script'
 
 module.exports = (aDictionary)->
   # `this` is the library.
@@ -146,7 +146,7 @@ module.exports = (aDictionary)->
 
   # 期望保留的"mvar"等于xxx
   this.define /[期希]望(?:记[住下忆]?|保[存留])的\s*$string\s*(不)?((?:大于|小于)等于|至[少多]|等于|是|包[含括](?:key)?|[><!]=|[<=>])\s*(.+)$/, (aKey, aNot, aOp, aValue)->
-    aValue = cson.parseCSONString aValue
+    aValue = cs.eval aValue
     myExpect = expect(this.ctx[aKey]).to.be
     myExpect = myExpect.not if aNot?
     switch aOp

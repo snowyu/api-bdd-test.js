@@ -1,12 +1,22 @@
 isObject  = require 'util-ex/lib/is/type/object'
 isArray   = require 'util-ex/lib/is/type/array'
 path      = require 'path'
-cson      = require 'cson'
+cs        = require 'coffee-script'
 
 module.exports = (aDictionary)->
   # `this` is the library.
 
-  this.define new RegExp('(GET|HEAD|DEL(?:ETE)?|POST|PATCH|PUT)\\s+$string[:]?\\n$object'), (method, resource, data={})->
+  this.define new RegExp('(GET|HEAD|DEL(?:ETE)?)\\s+$string'), (method, resource)->
+    testScope = this.ctx
+    method = method.toLowerCase()
+    request = this.api.request method, resource
+    .then (res)=>
+      testScope.result = res
+    .catch (err)=>
+      testScope.result = err
+      return err
+
+  this.define new RegExp('(GET|HEAD|DEL(?:ETE)?|POST|PATCH|PUT)\\s+$string[:]\\n$object'), (method, resource, data={})->
     testScope = this.ctx
     resource ?= this.resource
     method = method.toLowerCase()
@@ -94,7 +104,7 @@ module.exports = (aDictionary)->
 
   # expect the stored "mvar" equal xxx
   this.define /expect\s+(?:the\s+)(?:stored|kept|saved)\s+$string(?:\s+is|be|are|to)?\s+(not\s+)?(above|below|most|least|equa?l?|(?:include|contain)(?:\s+key)?|[><!]=|[<=>])\s*(.+)$/, (aKey, aNot, aOp, aValue)->
-    aValue = cson.parseCSONString aValue
+    aValue = cs.eval aValue
     myExpect = expect(this.ctx[aKey]).to.be
     myExpect = myExpect.not if aNot?
     switch aOp

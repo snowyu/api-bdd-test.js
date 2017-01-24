@@ -63,7 +63,8 @@ Or as the annotations in a feature file.
 
 the genernal api steps:
 
-* `/(GET|HEAD|DEL(?:ETE)?|POST|PATCH|PUT)\s+$string[:]?\n$object/`
+* `/(GET|HEAD|DEL(?:ETE)?)\s+$string/`
+* `/(GET|HEAD|DEL(?:ETE)?|POST|PATCH|PUT)\s+$string[:]\n$object/`
   * the object is [cson format](https://github.com/bevry/cson)
   * data: send to
   * heads:
@@ -175,5 +176,12 @@ module.exports = function(dict){
 
 ## History
 
+### V 0.3.0
+
++ referernce the variaible which stored by steps. use the "``" delimiter instead.
+  * it's an one line coffee-script code in this delimiter.
+    * `\`"#{myid}"\``
+
 ## TODO
 
+* ! add the before/after/beforeEach/afterEach steps

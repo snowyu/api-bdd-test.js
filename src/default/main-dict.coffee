@@ -1,20 +1,28 @@
 Yadda       = require 'yadda'
-cson        = require 'cson'
+cs          = require 'coffee-script'
+vm          = require? 'vm'
 
 converters  = Yadda.converters
-
+createContext = vm.Script.createContext ? vm.createContext
 
 # str_convert = (delimiter, value, next)->
 #   value = value.replace /\\(.)/g, '$1'
 #   next null, value
 
 str_convert = (value, next)->
+  delimiter = value[0]
   value = value.slice 1, value.length-1
-  next null, value
+  console
+  if delimiter is '`'
+    cstype_convert value, next
+  else
+    next null, value
 
-obj_convert = (value, next)->
+cstype_convert = (value, next)->
+  sandbox = createContext(testScope.context)
+  sandbox.require = require
   try
-    value = cson.parseCSONString value
+    value = cs.eval value, {sandbox}
     next null, value
   catch err
     next err
@@ -22,10 +30,11 @@ obj_convert = (value, next)->
 
 module.exports = (aDictionary)->
   aDictionary
-  .define 'string', /(".+"|'.+'|“.+”|‘.+’)/ , str_convert
+  .define 'string', /(".+"|'.+'|“.+”|‘.+’|`.+`)/ , str_convert
   # .define 'string', /(['"])([^\1\\]*(?:\\.[^\1\\]*)*)\1/, str_convert
   .define 'identifier', /([\w\x7f-\ufaff]+)/
-  .define 'object', /([^\u0000]*)/, obj_convert
+  .define 'object', /([^\u0000]*)/, cstype_convert
+  # .define 'cstype', /`(.+)`/, cstype_convert
   .define 'list', /([^\u0000]*)/, converters.list
   .define 'table', /([^\u0000]*)/, converters.table
   .define 'integer', /(\d+)/, converters.integer

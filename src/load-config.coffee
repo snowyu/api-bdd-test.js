@@ -1,11 +1,11 @@
 loadConfig = require 'load-config-file'
 yaml  = require 'js-yaml'
-cson  = require 'cson'
+cs    = require 'coffee-script'
 
 # first search.
 loadConfig.register(['.yaml', '.yml'], yaml.safeLoad)
 # second search
-loadConfig.register('.cson', cson.parseCSONString.bind(cson))
+loadConfig.register(['.cson', 'coffee'], cs.eval.bind(cs))
 # third search.
 loadConfig.register('.json', JSON.parse)
 
