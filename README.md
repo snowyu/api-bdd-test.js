@@ -53,6 +53,14 @@ in the `test` folder.
 
 #### features
 
+tag with `@only` before the scenario to execute the scenario only.
+tag with `@pending` before the scenario to stop the scenario.
+
+```cucumber
+@only
+Scenario Calc two value
+```
+
 language supports with:
 
 * File name postfix: a.english.feature
