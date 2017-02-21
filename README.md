@@ -173,6 +173,10 @@ module.exports = function(dict){
 
 * no back ref in regexp.
 * no optional group on `$xxx` defininition. eg, `$string?` should be wrong.
+* report the `<-- Undefined Step` error:
+  1. Duplication Regexp Step
+  2. Optional Group in the regexp step.
+
 
 ## History
 
