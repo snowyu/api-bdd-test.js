@@ -1,2 +1,2 @@
-server: http://localhost:3000
+server: http://localhost:3001
 root: /api
