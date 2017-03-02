@@ -55,6 +55,7 @@
   "bin": {},
   "scripts": {
     "test": "grunt test",
+    "build": "grunt build",
     "test-cov": "mocha --reporter dot && istanbul report text-summary lcovonly"
   },
   "dependencies": {
