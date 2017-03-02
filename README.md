@@ -129,6 +129,7 @@ the genernal Chinese api steps:
 * `记住结果到"myvar"`
 * `期望保存的"mvar"等于xxx`
 * `/[期希]望(不?存在)(?:记[住下忆]?|保[存留]的)?\s*$string$/`
+* `(?:查[询找]|列[出举])资源\\s*[:：]?[(（]?$identifier(?:[)）]?\\s*[,，.。])?`
 
 #### steps and libs
 
