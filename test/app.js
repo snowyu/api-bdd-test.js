@@ -21,6 +21,7 @@ module.exports = (function() {
     app.post('/api/bottle', createBottle);
     app.head('/api/bottle/:id', isBottleExists);
     app.get('/api/bottle/:id', getBottle);
+    app.get('/api/bottle', getBottles);
     app.put('/api/bottle/:id', putBottle);
     app.patch('/api/bottle/:id', putBottle);
     app.delete('/api/bottle/:id', delBottle);
@@ -47,6 +48,12 @@ module.exports = (function() {
         res.send(bottles[req.params.id])
       else
         res.sendStatus(404)
+    }
+
+    function getBottles(req, res) {
+      var result = []
+      Object.keys(bottles).forEach((id)=>result.push(bottles[id]))
+      res.send(result)
     }
 
     function putBottle(req, res) {
