@@ -8,8 +8,19 @@ module.exports = (aDictionary)->
   # 新建资源:ResName
   # a:1,b:2
   resNameRegEx    = '[:：]?[(（]?$identifier(?:[)）]?\\s*[,，.。])?'
-  resResultRegEx  = '[的其]?(?:内容|结果)[为是]?\\n$object'
+  resResultRegEx  = '[的其]?(?:内容|结果)[为是]?$object'
   res4DataRegEx   = resNameRegEx + '\\s*'+ resResultRegEx
+
+  this.define new RegExp('(?:查[询找]|列[出举])资源\\s*'+resNameRegEx), (resource)->
+    testScope = this.ctx
+    resource ?= this.resource
+    this.api.get resource
+    .then (res)=>
+      testScope.result = res
+      return
+    .catch (err)=>
+      testScope.result = err
+      return err
 
   this.define new RegExp('[新创]建资源\\s*'+res4DataRegEx), (resource, data)->
     testScope = this.ctx
@@ -57,11 +68,12 @@ module.exports = (aDictionary)->
   this.define /上次[的]?(?:状态[码]?|status)[为是：:]\s*$identifier/, (data)->
     testScope = this.ctx
     data = '200' if data is 'ok'
+    console.log(testScope.result) if testScope.result.status+'' isnt data
     expect(testScope.result.status+'').to.be.equal data
     return
 
 
-  this.define /上次[的]?(?:结果|body)([为是：:]|包[括含][：:]?)\s*\n$object/, (isInclude, data)->
+  this.define /上次[的]?(?:结果|body)([为是]|包[括含]?)[：:]?\s*$object/, (isInclude, data)->
     testScope = this.ctx
     if isInclude[0] is '包'
       expect(testScope.result.body).to.be.include data
@@ -167,7 +179,7 @@ module.exports = (aDictionary)->
           myExpect.include aValue
     return
 
-  this.define /[期希]望(?:记[住下忆]?|保[存留])的\s*$string\s*(不)?((?:大于|小于)等于|至[少多]|等于|是|包[含括](?:key)?|[><!]=|[<=>])[:：]\n$object/, (aKey, aNot, aOp, aValue)->
+  this.define /[期希]望(?:记[住下忆]?|保[存留])的\s*$string\s*(不)?((?:大于|小于)等于|至[少多]|等于|是|包[含括](?:key)?|[><!]=|[<=>])[:：]$object/, (aKey, aNot, aOp, aValue)->
     myExpect = expect(this.ctx[aKey]).to.be
     myExpect = myExpect.not if aNot?
     switch aOp
