@@ -16,7 +16,7 @@ module.exports = (aDictionary)->
       testScope.result = err
       return err
 
-  this.define new RegExp('(GET|HEAD|DEL(?:ETE)?|POST|PATCH|PUT)\\s+$string[:]\\n$object'), (method, resource, data={})->
+  this.define new RegExp('(GET|HEAD|DEL(?:ETE)?|POST|PATCH|PUT)\\s+$string[:]$object'), (method, resource, data={})->
     testScope = this.ctx
     resource ?= this.resource
     method = method.toLowerCase()
@@ -46,7 +46,7 @@ module.exports = (aDictionary)->
       testScope.result = err
       return err
 
-  this.define new RegExp('(?:last|prev(?:ious)?)\\s+results?\\s+(?:should\\s+)?(be|is|are|includes?)\\s*[:]?\\s*\\n$object'), (isInclude, data={})->
+  this.define new RegExp('(?:last|prev(?:ious)?)\\s+results?\\s+(?:should\\s+)?(be|is|are|includes?)\\s*[:]?\\s*$object'), (isInclude, data={})->
     testScope = this.ctx
     isInclude = isInclude[2] is 'n'
     if isInclude
@@ -127,7 +127,7 @@ module.exports = (aDictionary)->
           myExpect.include aValue
     return
 
-  this.define /expect\s+(?:the\s+)(?:stored|kept|saved)\s+$string(?:\s+is|be|are|to)?\s+(not\s+)?(above|below|most|least|equa?l?|(?:include|contain)(?:\s+key)?|[><!]=|[<=>])[:]\n$object/, (aKey, aNot, aOp, aValue)->
+  this.define /expect\s+(?:the\s+)(?:stored|kept|saved)\s+$string(?:\s+is|be|are|to)?\s+(not\s+)?(above|below|most|least|equa?l?|(?:include|contain)(?:\s+key)?|[><!]=|[<=>])[:]$object/, (aKey, aNot, aOp, aValue)->
     myExpect = expect(this.ctx[aKey]).to.be
     myExpect = myExpect.not if aNot?
     switch aOp
