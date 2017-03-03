@@ -1,3 +1,5 @@
+require './language'
+
 path        = require 'path'
 appRoot     = require 'app-root-path'
 loadConfig  = require './load-config'
