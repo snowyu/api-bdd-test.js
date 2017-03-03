@@ -1,6 +1,6 @@
-isObject  = require 'util-ex/lib/is/type/object'
-path      = require 'path'
-cs      = require 'coffee-script'
+isObject      = require 'util-ex/lib/is/type/object'
+path          = require 'path.js/lib/posix'
+cs            = require 'coffee-script'
 
 module.exports = (aDictionary)->
   # `this` is the library.
@@ -8,14 +8,27 @@ module.exports = (aDictionary)->
   # 新建资源:ResName
   # a:1,b:2
   resNameRegEx    = '[:：]?[(（]?$identifier(?:[)）]?\\s*[,，.。])?'
-  resResultRegEx  = '[的其]?(?:内容|结果)[为是]?$object'
+  resResultRegEx  = '[的其]?(?:内容|结果)[为是]?[:：]?$object'
   res4DataRegEx   = resNameRegEx + '\\s*'+ resResultRegEx
 
-  this.define new RegExp('(?:查[询找]|列[出举])资源\\s*'+resNameRegEx), (resource)->
+  this.define new RegExp('列[出举]资源\\s*'+resNameRegEx), (resource)->
     testScope = this.ctx
     resource ?= this.resource
     this.api.get resource
     .then (res)=>
+      testScope.result = res
+      return
+    .catch (err)=>
+      testScope.result = err
+      return err
+
+  this.define new RegExp('[搜查][索询找]资源\\s*'+resNameRegEx+'按?(?:指定|如下)?(?:条件|设置)[:：]?$object'), (resource, filter)->
+    testScope = this.ctx
+    resource ?= this.resource
+    result = this.api.get resource
+    console.log filter
+    result = result.query filter if filter
+    result.then (res)=>
       testScope.result = res
       return
     .catch (err)=>
@@ -32,10 +45,11 @@ module.exports = (aDictionary)->
       testScope.result = err
       return err
 
-  this.define new RegExp('[编修][辑改]资源\\s*'+res4DataRegEx), (resource, data)->
+  this.define new RegExp('[编修][辑改](?:id|ID|编号)[为是:：]?$string的?资源\\s*'+res4DataRegEx), (id, resource, data)->
     testScope = this.ctx
     resource ?= this.resource
-    this.api.put resource, data:data
+    id = path.join(resource, encodeURIComponent id) if resource
+    this.api.put id, data:data
     .then (res)=>
       testScope.result = res
     .catch (err)=>
@@ -65,13 +79,29 @@ module.exports = (aDictionary)->
       testScope.result = err
       return err
 
-  this.define /上次[的]?(?:状态[码]?|status)[为是：:]\s*$identifier/, (data)->
+  this.define /上次[的]?(?:状态[码]?|status)[为是][：:]?\s*$identifier/, (data)->
     testScope = this.ctx
     data = '200' if data is 'ok'
     console.log(testScope.result) if testScope.result.status+'' isnt data
     expect(testScope.result.status+'').to.be.equal data
     return
 
+  # this.define /上次[的]?(?:状态[码]?|status)匹配[：:]?$object/, (data)->
+  #   testScope = this.ctx
+  #   result = matchPattern testScope.result.status, data
+  #   if result
+  #     console.log(testScope.result)
+  #     throw result
+  #   return
+
+  # this.define /上次[的]?(?:结果|body)匹配[：:]?$match/, (pattern)->
+  #   testScope = this.ctx
+  #   result = matchPattern testScope.result.body, pattern
+  #   if result
+  #     console.log(testScope.result)
+  #     console.log pattern, testScope.result.body
+  #     throw new Error result
+  #   return
 
   this.define /上次[的]?(?:结果|body)([为是]|包[括含]?)[：:]?\s*$object/, (isInclude, data)->
     testScope = this.ctx
@@ -81,7 +111,7 @@ module.exports = (aDictionary)->
       expect(testScope.result.body).to.be.deep.equal data
 
   # 希望获得id为"id"的资源:bottle，其结果为
-  this.define new RegExp('[希期]望(?:获[取得]|取[得]?)(?:id|ID|编号)[为是:：]?$string的?资源\\s*'+res4DataRegEx), (id, resource, data)->
+  this.define new RegExp('(?:获[取得]|取[得]?)(?:id|ID|编号)[为是:：]?$string的?资源\\s*'+res4DataRegEx), (id, resource, data)->
     resource ?= this.resource
     id = path.join(resource, encodeURIComponent id) if resource
     this.api.get id
@@ -157,7 +187,7 @@ module.exports = (aDictionary)->
     return
 
   # 期望保留的"mvar"等于xxx
-  this.define /[期希]望(?:记[住下忆]?|保[存留])的\s*$string\s*(不)?((?:大于|小于)等于|至[少多]|等于|是|包[含括](?:key)?|[><!]=|[<=>])\s*(.+)$/, (aKey, aNot, aOp, aValue)->
+  this.define /(?:记[住下忆]?|保[存留])的\s*$string\s*(不)?((?:大于|小于)等于|至[少多]|等于|是|包[含括](?:key)?|[><!]=|[<=>])\s*(.+)$/, (aKey, aNot, aOp, aValue)->
     aValue = cs.eval aValue
     myExpect = expect(this.ctx[aKey]).to.be
     myExpect = myExpect.not if aNot?
@@ -179,7 +209,7 @@ module.exports = (aDictionary)->
           myExpect.include aValue
     return
 
-  this.define /[期希]望(?:记[住下忆]?|保[存留])的\s*$string\s*(不)?((?:大于|小于)等于|至[少多]|等于|是|包[含括](?:key)?|[><!]=|[<=>])[:：]$object/, (aKey, aNot, aOp, aValue)->
+  this.define /(?:记[住下忆]?|保[存留])的\s*$string\s*(不)?((?:大于|小于)等于|至[少多]|等于|是|包[含括](?:key)?|[><!]=|[<=>])[:：]$object/, (aKey, aNot, aOp, aValue)->
     myExpect = expect(this.ctx[aKey]).to.be
     myExpect = myExpect.not if aNot?
     switch aOp
@@ -200,7 +230,7 @@ module.exports = (aDictionary)->
           myExpect.include aValue
     return
 
-  this.define /[期希]望(不?存在)(?:记[住下忆]?|保[存留]的)?\s*$string$/, (aExists, aKey)->
+  this.define /(不?存在)(?:记[住下忆]?|保[存留]的)?\s*$string$/, (aExists, aKey)->
     if aExists[0] isnt '不'
       expect(this.ctx[aKey]).to.be.exist
     else
