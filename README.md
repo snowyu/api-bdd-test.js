@@ -55,6 +55,10 @@ in the `test` folder.
 
 tag with `@only` before the scenario to execute the scenario only.
 tag with `@pending` before the scenario to stop the scenario.
+tag with `@before` before the scenario to turn the scenario to a before feature hook.
+tag with `@after` before the scenario to turn the scenario to a after feature hook.
+tag with `@beforeEach` before the scenario to turn the scenario to a before each scenario hook.
+tag with `@afterEach` before the scenario to turn the scenario to a after each scenario hook.
 
 ```cucumber
 @only
@@ -115,21 +119,22 @@ Scenario: POST and Get result
 the genernal Chinese api steps:
 
 * `[新创]建资源\\s*[:：]?[(（]?$identifier(?:[)）]?\\s*[,，.。])?[的其]?(?:内容|结果)[为是]?\\n$object`
-* `[编修][辑改]资源\\s*[:：]?[(（]?$identifier(?:[)）]?\\s*[,，.。])?[的其]?(?:内容|结果)[为是]?\\n$object`
+* `[编修][辑改](?:id|ID|编号)[为是:：]?$string的?资源\\s*'+res4DataRegEx`
 * `删[除掉](?:id|ID|编号)[为是:：]?$string的?资源\\s*[:：]?[(（]?$identifier(?:[)）]?\\s*[,，.。])?`
 * `检[查测]是否存在资源\\s*[:：]?[(（]?$identifier(?:[)）]?\\s*[,，.。])?\\s*[:：]?$string`
 * `/上次[的]?(?:状态[码]?|status)[为是：:]\s*$identifier/`
 * `/上次[的]?(?:结果|body)([为是：:]|包[括含][：:]?)\s*\n$object/`
-* `[希期]望(?:获[取得]|取[得]?)(?:id|ID|编号)[为是:：]?$string的?资源\\s*[:：]?[(（]?$identifier(?:[)）]?\\s*[,，.。])?[的其]?(?:内容|结果)[为是]?\\n$object`
+* `(?:获[取得]|取[得]?)(?:id|ID|编号)[为是:：]?$string的?资源\\s*[:：]?[(（]?$identifier(?:[)）]?\\s*[,，.。])?[的其]?(?:内容|结果)[为是]?\\n$object`
 * `(?:获[取得]|取得?)资源\\s*[:：]?[(（]?$identifier(?:[)）]?\\s*[,，.。])?\\s*[:：]?$string`
 * `([不]?会?存在|没有?|有)(?:id|ID|编号)[为是:：]?$string的?资源\\s*[:：]?[(（]?$identifier(?:[)）]?\\s*[,，.。])?`
 * `/登[录陆]\s*用户[:：]\s*$string\s*[,，]\s*密码[:：]\s*$string/`
 * `/注销用户|退出系统/`
 * `/(?:记[住下忆]?|保[存留])结果的(?:属性)?$string到[:：]?$string/`
 * `记住结果到"myvar"`
-* `期望保存的"mvar"等于xxx`
-* `/[期希]望(不?存在)(?:记[住下忆]?|保[存留]的)?\s*$string$/`
-* `(?:查[询找]|列[出举])资源\\s*[:：]?[(（]?$identifier(?:[)）]?\\s*[,，.。])?`
+* `保存的"mvar"等于xxx`
+* `/(不?存在)(?:记[住下忆]?|保[存留]的)?\s*$string$/`
+* `列[出举]资源\\s*[:：]?[(（]?$identifier(?:[)）]?\\s*[,，.。])?`
+* `[搜查][索询找]资源\\s*'+resNameRegEx+'按?(?:指定|如下)?(?:条件|设置)[:：]?$object`
 
 #### steps and libs
 
