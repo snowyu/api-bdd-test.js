@@ -1,9 +1,21 @@
-@only
 功能: 查询
 
-@before
+@功能前提
+@功能收尾
+# @pending
 场景: 清空数据
   假定 DELETE "bottle"
+  并且 increment _incr_
+
+@功能收尾
+场景: 检视自增变量
+  假定 期望保留的"s"=7
+  假定 期望保留的"_incr_"=2
+
+
+@场景前提
+场景: 增加变量数据
+  假定 increment s
 
 场景: 先创建一系列的瓶子
 

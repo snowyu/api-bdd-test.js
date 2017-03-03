@@ -1,6 +1,8 @@
 # language: Chinese
 功能: 测试创建
 
+背景: 清空数据
+  假定 DELETE "bottle"
 
 #@暂停
 场景: 创建瓶子

@@ -22,6 +22,7 @@ module.exports = (function() {
     app.head('/api/bottle/:id', isBottleExists);
     app.get('/api/bottle/:id', getBottle);
     app.get('/api/bottle', getBottles);
+    app.delete('/api/bottle', delBottles);
     app.put('/api/bottle/:id', putBottle);
     app.patch('/api/bottle/:id', putBottle);
     app.delete('/api/bottle/:id', delBottle);
@@ -52,16 +53,38 @@ module.exports = (function() {
 
     function getBottles(req, res) {
       var result = []
-      Object.keys(bottles).forEach((id)=>result.push(bottles[id]))
+      var filter = req.query.filter
+      var where  = filter && filter.where
+
+      for (var id of Object.keys(bottles)) {
+        var v = where && Object.keys(where)
+        var bottle = bottles[id]
+        if (v) {
+          for (var k of Object.keys(bottle)) {
+            if (bottle[k] == where[k]) {
+              result.push(bottle)
+              break
+            }
+          }
+        }
+        else
+          result.push(bottle);
+      }
       res.send(result)
     }
 
     function putBottle(req, res) {
       if (bottles[req.params.id]) {
+        req.body.id = req.params.id
         bottles[req.params.id] = req.body
         res.send(bottles[req.params.id])
       } else
         res.sendStatus(404)
+    }
+
+    function delBottles(req, res) {
+      bottles = {}
+      res.send(bottles)
     }
 
     function delBottle(req, res) {
