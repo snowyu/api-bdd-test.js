@@ -54,19 +54,21 @@
   "main": "./index",
   "bin": {},
   "scripts": {
-    "pretest":"grunt build",
+    "pretest": "grunt build",
     "test": "grunt test",
     "build": "grunt build",
     "test-cov": "mocha --reporter dot && istanbul report text-summary lcovonly"
   },
   "dependencies": {
     "app-root-path": "^2.0.1",
+    "bluebird": "^3.4.7",
     "chai": "~3.5.0",
     "coffee-script": "^1.12.2",
     "inherits-ex": "^1.1.6",
     "js-yaml": "^3.7.0",
     "load-config-file": "^0.3.3",
     "loopback-supertest": "^0.1.12",
+    "path.js": "^1.0.7",
     "require-all": "^2.1.0",
     "supertest": "^2.0.1",
     "util-ex": "^0.3.15",
