@@ -1,3 +1,4 @@
+Promise   = require 'bluebird'
 Yadda     = require 'yadda'
 chai      = require 'chai'
 path      = require 'path'
@@ -17,7 +18,23 @@ container.assert = chai.assert
 container.should = chai.should()
 container.testScope = {}
 
-
+#cleanArray.call array
+cleanArray = ->
+  i = 0
+  while i < @length
+    unless @[i]?
+      @splice i, 1
+    else
+      i++
+  return this
+# cleanArray = (aDeletedValue)->
+#   i = 0
+#   while i < @length
+#     if @[i] is aDeletedValue
+#       @splice i, 1
+#     else
+#       i++
+#   return this
 
 resolveDirFromRoot = (aDir, aRootDir)->
   if isArray aDir
@@ -100,6 +117,32 @@ module.exports = class Features
       , aLangName
       , /^([^\.\-].*)[\-\.]lib[s]?\.(js|coffee)$/
 
+  # before/after, beforeEach/afterEach
+  processHook: (aFeature, yadda, context)->
+    yaddaRun = Promise.promisify(yadda.run)
+    vHooks =
+      before: []
+      after: []
+      beforeEach: []
+      afterEach: []
+    scenarios = aFeature.scenarios
+    for scenario, i in scenarios
+      for k, v of vHooks
+        if scenario.annotations[k]
+          v.push scenario
+          scenarios[i] = undefined
+          break
+    for k,v of vHooks
+      if v.length
+        for scenario in v
+          container[k] scenario.title, ->
+            Promise.mapSeries scenario.steps, (step)->
+              testScope.context = context.ctx
+              yaddaRun.call yadda, step
+    cleanArray.call scenarios
+
+
+
   # run a feature file.
   runFile: (aFile, aLangName)->
     aLang = Yadda.localisation[aLangName]
@@ -128,7 +171,11 @@ module.exports = class Features
       # the context could be used in the .give etc function: `this.language`
       # yadda = Yadda.createInstance libraries.concat(steps), context
       yadda = Yadda.createInstance libraries, context
+
+      @processHook feature, yadda, context
+      # add the describe to each scenario
       scenarios feature.scenarios, (scenario)->
+        # add the it to each step
         steps scenario.steps, (step, done)->
           testScope.context = context.ctx
           yadda.run(step, done)
