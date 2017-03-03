@@ -36,6 +36,16 @@ cleanArray = ->
 #       i++
 #   return this
 
+has_annotation = (annotations, name, language)->
+  try name = language.localise(name)
+  regexp = new RegExp('^' + name + '$', 'i')
+  result = false
+  for k,v of annotations
+    result = regexp.test(k) and v
+    break if result
+  # console.log 'has_annotation', name, annotations, result
+  result
+
 resolveDirFromRoot = (aDir, aRootDir)->
   if isArray aDir
     aDir = for v in aDir
@@ -117,8 +127,8 @@ module.exports = class Features
       , aLangName
       , /^([^\.\-].*)[\-\.]lib[s]?\.(js|coffee)$/
 
-  # before/after, beforeEach/afterEach
-  processHook: (aFeature, yadda, context)->
+  # before/after, beforeEach/afterEach hooks
+  processHook: (aFeature, yadda, context, lang)->
     yaddaRun = Promise.promisify(yadda.run)
     vHooks =
       before: []
@@ -128,20 +138,27 @@ module.exports = class Features
     scenarios = aFeature.scenarios
     for scenario, i in scenarios
       for k, v of vHooks
-        if scenario.annotations[k]
+        if has_annotation scenario.annotations, k, lang
           v.push scenario
           scenarios[i] = undefined
-          break
+          # make one scenario could be before and after too.
+          # break
     for k,v of vHooks
       if v.length
         for scenario in v
-          container[k] scenario.title, ->
-            Promise.mapSeries scenario.steps, (step)->
-              testScope.context = context.ctx
-              yaddaRun.call yadda, step
+          unless has_annotation scenario.annotations, 'pending', lang
+            # console.log 'before def', k, scenario.title
+            ((scenario, hook)->
+              # before/after '', ->
+              container[hook] scenario.title, ->
+                # console.log 'def', hook, scenario.title
+                Promise.mapSeries scenario.steps, (step)->
+                  # console.log scenario.title, step
+                  testScope.context = context.ctx
+                  yaddaRun.call yadda, step
+            )(scenario, k)
+    # remove the scenarios for hooks
     cleanArray.call scenarios
-
-
 
   # run a feature file.
   runFile: (aFile, aLangName)->
@@ -172,7 +189,7 @@ module.exports = class Features
       # yadda = Yadda.createInstance libraries.concat(steps), context
       yadda = Yadda.createInstance libraries, context
 
-      @processHook feature, yadda, context
+      @processHook feature, yadda, context, aLang
       # add the describe to each scenario
       scenarios feature.scenarios, (scenario)->
         # add the it to each step
