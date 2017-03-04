@@ -164,9 +164,9 @@ module.exports = class Features
                 when 'afterStep' then hookName = 'afterEach'
               # before/after '', ->
               container[hookName] scenario.title, ->
-                console.log 'def', hookName, scenario.title
+                # console.log 'def', hookName, scenario.title
                 Promise.mapSeries scenario.steps, (step)->
-                  console.log scenario.title, step
+                  # console.log scenario.title, step
                   testScope.context = context.ctx
                   yaddaRun.call yadda, step
             )(scenario, k)
