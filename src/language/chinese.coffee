@@ -6,3 +6,5 @@ module.exports = patchLang Yadda.localisation.Chinese,
   'after': '[Aa]fter|功能收尾'
   'beforeEach': '[Bb]eforeEach|(?:场景|大纲|剧本)前提'
   'afterEach': '[Aa]fterEach|(?:场景|大纲|剧本)收[尾关]'
+  'beforeStep': '[Bb]eforeStep|步骤前提'
+  'afterStep': '[Aa]fterStep|步骤收[尾关]'

@@ -6,3 +6,5 @@ module.exports = patchLang Yadda.localisation.English,
   'after': '[Aa]fter'
   'beforeEach': '[Bb]eforeEach'
   'afterEach': '[Aa]fterEach'
+  'beforeStep': '[Bb]eforeStep'
+  'afterStep': '[Aa]fterStep'

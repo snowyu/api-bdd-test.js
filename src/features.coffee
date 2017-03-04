@@ -127,38 +127,50 @@ module.exports = class Features
       , aLangName
       , /^([^\.\-].*)[\-\.]lib[s]?\.(js|coffee)$/
 
-  # before/after, beforeEach/afterEach hooks
-  processHook: (aFeature, yadda, context, lang)->
-    yaddaRun = Promise.promisify(yadda.run)
-    vHooks =
+  # before/after feature, beforeEach/afterEach scenario, beforeStep/afterStep hooks
+  moveHooksTo: (aFeature, aLang)->
+    aDest =
       before: []
       after: []
       beforeEach: []
       afterEach: []
+      beforeStep: []
+      afterStep: []
     scenarios = aFeature.scenarios
     for scenario, i in scenarios
-      for k, v of vHooks
-        if has_annotation scenario.annotations, k, lang
+      for k, v of aDest
+        if has_annotation scenario.annotations, k, aLang
           v.push scenario
           scenarios[i] = undefined
           # make one scenario could be before and after too.
           # break
-    for k,v of vHooks
-      if v.length
+    # remove the hook's scenarios in the feature
+    cleanArray.call scenarios
+    aDest
+
+  yaddaRun = null
+  processHook: (aHooks, yadda, context, lang)->
+    yaddaRun = Promise.promisify(yadda.run) unless yaddaRun
+    for k,v of aHooks
+      if v && v.length
         for scenario in v
           unless has_annotation scenario.annotations, 'pending', lang
             # console.log 'before def', k, scenario.title
-            ((scenario, hook)->
+            ((scenario, hookName)->
+              switch hookName
+                when 'beforeEach' then hookName = 'before'
+                when 'afterEach' then hookName = 'after'
+                when 'beforeStep' then hookName = 'beforeEach'
+                when 'afterStep' then hookName = 'afterEach'
               # before/after '', ->
-              container[hook] scenario.title, ->
-                # console.log 'def', hook, scenario.title
+              container[hookName] scenario.title, ->
+                console.log 'def', hookName, scenario.title
                 Promise.mapSeries scenario.steps, (step)->
-                  # console.log scenario.title, step
+                  console.log scenario.title, step
                   testScope.context = context.ctx
                   yaddaRun.call yadda, step
             )(scenario, k)
-    # remove the scenarios for hooks
-    cleanArray.call scenarios
+    return
 
   # run a feature file.
   runFile: (aFile, aLangName)->
@@ -189,9 +201,18 @@ module.exports = class Features
       # yadda = Yadda.createInstance libraries.concat(steps), context
       yadda = Yadda.createInstance libraries, context
 
-      @processHook feature, yadda, context, aLang
+      vGHooks = @moveHooksTo feature, aLang
+      vHooks = {}
+      for i in ['before', 'after', 'beforeStep', 'afterStep']
+        vHooks[i] = vGHooks[i]
+        delete vGHooks[i]
+      @processHook vHooks, yadda, context, aLang # process feature and step hooks
+
       # add the describe to each scenario
-      scenarios feature.scenarios, (scenario)->
+      scenarios feature.scenarios, (scenario)=>
+        # process scenario hooks
+        @processHook vGHooks, yadda, context, aLang
+
         # add the it to each step
         steps scenario.steps, (step, done)->
           testScope.context = context.ctx
