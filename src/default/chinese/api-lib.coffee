@@ -26,7 +26,6 @@ module.exports = (aDictionary)->
     testScope = this.ctx
     resource ?= this.resource
     result = this.api.get resource
-    console.log filter
     result = result.query filter if filter
     result.then (res)=>
       testScope.result = res
