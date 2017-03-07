@@ -196,6 +196,13 @@ module.exports = function(dict){
 
 ## History
 
+### V 0.4.0
+
++ Add Special Scenarios
+  * add the before/after annotations for feature hook
+  * add the beforeEach/afterEach annotations for Scenario hook
+  + add the beforeStep/afterStep annotations for step hook
+
 ### V 0.3.0
 
 + referernce the variaible which stored by steps. use the "``" delimiter instead.
@@ -204,4 +211,3 @@ module.exports = function(dict){
 
 ## TODO
 
-* ! add the before/after/beforeEach/afterEach steps
