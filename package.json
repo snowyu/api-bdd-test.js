@@ -62,21 +62,23 @@
   "dependencies": {
     "app-root-path": "^2.0.1",
     "bluebird": "^3.4.7",
-    "chai": "~3.5.0",
     "coffee-script": "^1.12.2",
     "inherits-ex": "^1.1.6",
     "js-yaml": "^3.7.0",
     "load-config-file": "^0.3.3",
-    "loopback-supertest": "^0.1.12",
     "path.js": "^1.0.7",
     "require-all": "^2.1.0",
-    "supertest": "^2.0.1",
     "util-ex": "^0.3.15",
     "yadda": "^0.22.1"
   },
-  "peerDependencies": {},
+  "peerDependencies": {
+    "chai": "*",
+    "loopback-supertest": ">=0.1.0",
+    "supertest": ">=2.0.0"
+  },
   "devDependencies": {
     "body-parser": "^1.15.2",
+    "chai": "^3.5.0",
     "coffee-coverage": "^1.0.1",
     "coffee-script": "^1.12.0",
     "express": "^4.14.0",
@@ -89,11 +91,13 @@
     "grunt-newer": "~1.2.0",
     "grunt-release": "~0.13.1",
     "istanbul": "^0.4.3",
+    "loopback-supertest": "^0.1.12",
     "mocha": "~3.2.0",
     "mocha-sinon": "latest",
     "rimraf": "~2.5.2",
     "shasum": "1.0.0",
     "sinon": "~1.17.4",
-    "sinon-chai": "~2.8.0"
+    "sinon-chai": "~2.8.0",
+    "supertest": "^3.0.0"
   }
 }

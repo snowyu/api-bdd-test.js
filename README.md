@@ -7,7 +7,7 @@ Use the BDD(Cucumber) to test the RESTful API.
 
 1. Install in your project:
 
-    `npm install --save-dev api-bdd-test mocha supertest supertest-as-promised`
+    `npm install --save-dev api-bdd-test mocha chai supertest loopback-supertest`
 
 1. mkdir `test` in your project root folder
 1. generate the `mocha.opts` file in the test folder:
