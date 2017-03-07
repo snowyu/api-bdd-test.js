@@ -1,7 +1,7 @@
 {
   "name": "api-bdd-test",
   "description": "use the bdd(cucumber) to test the RESTfull API",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "author": {
     "name": "Riceball LEE",
     "email": "snowyu.lee@gmail.com",
