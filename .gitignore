@@ -8,3 +8,4 @@ db.json
 .cache
 lib
 *.lock
+.vscode
