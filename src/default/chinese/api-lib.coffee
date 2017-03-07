@@ -9,9 +9,9 @@ module.exports = (aDictionary)->
   #console.log
   # 新建资源:ResName
   # a:1,b:2
-  resNameRegEx    = '[:：]?[(（]?$identifier(?:[)）]?\\s*[,，.。])?'
+  resNameRegEx    = '[:：]?[(（‘\'“"]?$identifier[)）’”"\']?'
   resResultRegEx  = '[的其]?(?:内容|结果)[为是]?[:：]?$object'
-  res4DataRegEx   = resNameRegEx + '\\s*'+ resResultRegEx
+  res4DataRegEx   = resNameRegEx + '[,，.。]?\\s*'+ resResultRegEx
 
   this.define new RegExp('列[出举]资源\\s*'+resNameRegEx), (resource)->
     testScope = this.ctx
@@ -24,7 +24,7 @@ module.exports = (aDictionary)->
       testScope.result = err
       return err
 
-  this.define new RegExp('[搜查][索询找]资源\\s*'+resNameRegEx+'按?(?:指定|如下)?(?:条件|设置)[:：]?$object'), (resource, filter)->
+  this.define new RegExp('[搜查][索询找]资源\\s*'+resNameRegEx+'[,，.。]?\\s*按?(?:指定|如下)?(?:条件|设置)[:：]?$object'), (resource, filter)->
     testScope = this.ctx
     resource ?= this.resource
     result = this.api.get resource
@@ -44,6 +44,21 @@ module.exports = (aDictionary)->
       testScope.result = res
     .catch (err)=>
       testScope.result = err
+      return err
+
+  this.define new RegExp('[新创]建资源\\s*'+resNameRegEx + '成功[,，.。]?\\s*'+ resResultRegEx), (resource, data)->
+    testScope = this.ctx
+    resource ?= this.resource
+    this.api.post resource, data:data
+    .then (res)=>
+      testScope.result = res
+      return if res.status is 200 or res.status is 201
+      console.log res
+      expect(res.status).to.be.equal 200
+    .catch (err)=>
+      testScope.result = err
+      console.log err
+      expect(err).to.be.null
       return err
 
   this.define new RegExp('[编修][辑改](?:id|ID|编号)[为是:：]?$string的?资源\\s*'+res4DataRegEx), (id, resource, data)->
