@@ -1,9 +1,8 @@
 Yadda       = require 'yadda'
-cs          = require 'coffee-script'
-vm          = require? 'vm'
+cson        = require '../cson-string'
 
 converters  = Yadda.converters
-createContext = vm.Script.createContext ? vm.createContext
+# createContext = vm.Script.createContext ? vm.createContext
 
 # str_convert = (delimiter, value, next)->
 #   value = value.replace /\\(.)/g, '$1'
@@ -19,10 +18,8 @@ str_convert = (value, next)->
     next null, value
 
 cstype_convert = (value, next)->
-  sandbox = createContext(testScope.context)
-  sandbox.require = require
   try
-    value = cs.eval value, {sandbox}
+    value = cson value
     next null, value
   catch err
     next err

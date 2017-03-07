@@ -90,6 +90,7 @@ the genernal api steps:
   * explain to see http://visionmedia.github.io/superagent/
 * `/(?:last|prev(?:ious)?)\\s+results?\s+(?:should\s+)?(be|is|are|includes?)\n$object/`
 * `/(?:last|prev(?:ious)?)\s+status\s*(?:code)?\\s*(?:should\\s+)?((?:be|is)(?:n't|\s+not)?)\s*[:]?\s*$integer/`
+* keep the `result.body.id` to 'myvar'
 
 eg,
 
@@ -137,6 +138,7 @@ the genernal Chinese api steps:
 * `/(不?存在)(?:记[住下忆]?|保[存留]的)?\s*$string$/`
 * `列[出举]资源\\s*[:：]?[(（]?$identifier(?:[)）]?\\s*[,，.。])?`
 * `[搜查][索询找]资源\\s*'+resNameRegEx+'按?(?:指定|如下)?(?:条件|设置)[:：]?$object`
+* 记住`result.body[0].id`到"myvar"
 
 #### steps and libs
 

@@ -2,6 +2,7 @@ isObject  = require 'util-ex/lib/is/type/object'
 isArray   = require 'util-ex/lib/is/type/array'
 path      = require 'path'
 cs        = require 'coffee-script'
+toQuery   = require '../to-query'
 
 module.exports = (aDictionary)->
   # `this` is the library.
@@ -26,6 +27,8 @@ module.exports = (aDictionary)->
     data.query = data.queries || data.query
     data.field = data.fields || data.field
     data.attach = data.attachs || data.attachments || data.attachment || data.attach
+    toQuery data.query if data.query
+
     request = request.send data.data if data.data
     # accepting the canonicalized MIME type name complete with type/subtype, or simply the extension name such as "xml", "json", "png", etc
     # defaults to json
@@ -85,6 +88,11 @@ module.exports = (aDictionary)->
     .catch (err)=>
       testScope.result = err
       return err
+
+  # keep the `result.body.id` to 'myvar'
+  this.define /(?:keep|store|save)\s+(?:the\s+)?$string\s+(?:in)?to\s+$string/, (aKey, aToVar)->
+    this.ctx[aToVar] = aKey
+    return
 
   # keep the result of 'body.id' to 'myvar'
   this.define /(?:keep|store|save)\s+(?:the\s+)?result\s+of\s+$string\s+(?:in)?to\s+$string/, (aKey, aToVar)->

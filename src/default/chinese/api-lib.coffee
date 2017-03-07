@@ -1,6 +1,8 @@
 isObject      = require 'util-ex/lib/is/type/object'
+isString      = require 'util-ex/lib/is/type/string'
 path          = require 'path.js/lib/posix'
 cs            = require 'coffee-script'
+toQuery       = require '../../to-query'
 
 module.exports = (aDictionary)->
   # `this` is the library.
@@ -26,7 +28,7 @@ module.exports = (aDictionary)->
     testScope = this.ctx
     resource ?= this.resource
     result = this.api.get resource
-    result = result.query filter if filter
+    result = result.query toQuery filter if filter
     result.then (res)=>
       testScope.result = res
       return
@@ -170,10 +172,16 @@ module.exports = (aDictionary)->
       testScope.result = err
       return err
 
+  # 记住`result.body[0].id`到"myvar"
+  this.define /(?:记[住下忆]?|保[存留])$string到[:：]?$string/, (aKey, aToVar)->
+    this.ctx[aToVar] = aKey
+    return
+
+
   # 记住结果的"body.id"到"myvar"
   this.define /(?:记[住下忆]?|保[存留])结果的$string(?:属性)?到[:：]?$string/, (aKey, aToVar)->
     vResult = this.ctx.result
-    if aKey? and aKey.length and vResult?
+    if isString(aKey) and aKey.length and vResult?
       aKey = aKey.split '.'
       for k in aKey
         vResult = vResult[k] if vResult?

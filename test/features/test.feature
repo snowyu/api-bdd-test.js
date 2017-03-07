@@ -27,6 +27,7 @@
     b:2
     ----
   并且 记住结果的"body.id"到"myid"
+  并且 记住`result.body.id`到"myid1"
   并且 记住结果到"myres"
   并且 期望存在保留的"myid"
   并且 期望存在"myres"
@@ -34,6 +35,7 @@
   并且 期望保留的"myid">=1
   并且 期望保留的"myid"不等于2
   并且 期望保留的"myid"=1
+  并且 期望保留的"myid1"=1
   并且 期望保留的"myres"包含:
     ---
       status:200

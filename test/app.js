@@ -4,6 +4,7 @@
 var express = require('express');
 var bodyParser = require('body-parser')
 var app = express();
+var isString = require('util-ex/lib/is/type/string');
 
 module.exports = (function() {
 
@@ -54,6 +55,9 @@ module.exports = (function() {
     function getBottles(req, res) {
       var result = []
       var filter = req.query.filter
+      if (isString(filter)) {
+        filter = JSON.parse(filter)
+      }
       var where  = filter && filter.where
 
       for (var id of Object.keys(bottles)) {

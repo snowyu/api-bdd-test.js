@@ -20,8 +20,10 @@ Scenario: POST and Get result
   a: 1
   ----
   And keep the result of "body.id" to "myid"
+  And keep the `result.body.id` to "myid1"
   And keep the result to "myres"
   And expect the stored "myid" equal 1
+  And expect the stored "myid1" equal 1
   And expect the stored "myid" is not equal 0
   And expect the kept "myid" least 1
   And expect the saved "myres" include:
