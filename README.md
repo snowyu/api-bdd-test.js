@@ -139,6 +139,7 @@ the genernal Chinese api steps:
 * `列[出举]资源\\s*[:：]?[(（]?$identifier(?:[)）]?\\s*[,，.。])?`
 * `[搜查][索询找]资源\\s*'+resNameRegEx+'按?(?:指定|如下)?(?:条件|设置)[:：]?$object`
 * 记住`result.body[0].id`到"myvar"
+* 获得id为"id",过滤条件为"xxx"的资源:bottle
 
 #### steps and libs
 

@@ -1,7 +1,7 @@
 isObject      = require 'util-ex/lib/is/type/object'
 isString      = require 'util-ex/lib/is/type/string'
 path          = require 'path.js/lib/posix'
-cs            = require 'coffee-script'
+cson          = require '../../cson-string'
 toQuery       = require '../../to-query'
 
 module.exports = (aDictionary)->
@@ -127,7 +127,7 @@ module.exports = (aDictionary)->
       expect(testScope.result.body).to.be.deep.equal data
 
   # 希望获得id为"id"的资源:bottle，其结果为
-  this.define new RegExp('(?:获[取得]|取[得]?)(?:id|ID|编号)[为是:：]?$string的?资源\\s*'+res4DataRegEx), (id, resource, data)->
+  this.define new RegExp('[获取拿得][取得到](?:id|ID|编号)[为是:：]?$string的?资源\\s*'+res4DataRegEx), (id, resource, data)->
     resource ?= this.resource
     id = path.join(resource, encodeURIComponent id) if resource
     this.api.get id
@@ -139,11 +139,17 @@ module.exports = (aDictionary)->
     #   expect(err).to.be.include data
     #   return err
 
-  this.define new RegExp('(?:获[取得]|取得?)资源\\s*'+resNameRegEx + '\\s*[:：]?$string'), (resource, id)->
+  # 获得id为"id",过滤条件为"xxx"的资源:bottle
+  this.define new RegExp('[获取拿得][取得到](?:id|ID|编号)[为是:：]?$string[,，]?\\s*过?滤?条件[为是:：]?$string的?资源\\s*'+resNameRegEx), (id, filter, resource)->
     testScope = this.ctx
     resource ?= this.resource
+    console.log id, filter, resource
+    # return
+    filter = JSON.stringify cson filter if isString(filter) and filter.length
     id = path.join(resource, encodeURIComponent id) if resource
-    this.api.get id
+    result = this.api.get id
+    result.query filter: filter if filter
+    result
     .then (res)=>
       testScope.result = res
       return
@@ -210,7 +216,7 @@ module.exports = (aDictionary)->
 
   # 期望保留的"mvar"等于xxx
   this.define /(?:记[住下忆]?|保[存留])的\s*$string\s*(不)?((?:大于|小于)等于|至[少多]|等于|是|包[含括](?:key)?|[><!]=|[<=>])\s*(.+)$/, (aKey, aNot, aOp, aValue)->
-    aValue = cs.eval aValue
+    aValue = cson aValue
     myExpect = expect(this.ctx[aKey]).to.be
     myExpect = myExpect.not if aNot?
     switch aOp

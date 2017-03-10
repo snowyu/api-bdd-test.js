@@ -5,6 +5,7 @@ var express = require('express');
 var bodyParser = require('body-parser')
 var app = express();
 var isString = require('util-ex/lib/is/type/string');
+var extend = require('util-ex/lib/_extend');
 
 module.exports = (function() {
 
@@ -46,9 +47,19 @@ module.exports = (function() {
     }
 
     function getBottle(req, res) {
-      if (bottles[req.params.id])
-        res.send(bottles[req.params.id])
-      else
+      var result = bottles[req.params.id];
+      if (result){
+        result = extend({}, result);
+        var filter = req.query.filter;
+        if (isString(filter)) filter = JSON.parse(filter);
+        if (filter && filter.fields){
+          if (isString(filter.fields)) filter.fields = [filter.fields];
+          for (var k in result) {
+            if (filter.fields.indexOf(k) === -1) delete result[k];
+          }
+        }
+        res.send(result);
+      } else
         res.sendStatus(404)
     }
 
