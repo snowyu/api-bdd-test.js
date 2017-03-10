@@ -126,13 +126,17 @@ module.exports = (aDictionary)->
     else
       expect(testScope.result.body).to.be.deep.equal data
 
-  # 希望获得id为"id"的资源:bottle，其结果为
-  this.define new RegExp('[获取拿得][取得到](?:id|ID|编号)[为是:：]?$string的?资源\\s*'+res4DataRegEx), (id, resource, data)->
+  # 希望获得id为"id"的资源:bottle，其结果（包含）为
+  this.define new RegExp('[获取拿得][取得到](?:id|ID|编号)[为是:：]?$string的?资源\\s*'+resNameRegEx + '[,，.。]?\\s*[的其]?(?:内容|结果)(包[含括]|[为是等]同?于?)[:：]?$object'), (id, resource, aInclude, data)->
     resource ?= this.resource
     id = path.join(resource, encodeURIComponent id) if resource
+    aInclude = aInclude[0] is '包'
     this.api.get id
     .then (res)=>
-      expect(res.body).to.be.include data
+      if aInclude
+        expect(res.body).to.be.containSubset data
+      else
+        expect(res.body).to.be.deep.equal data
       return
     # .catch (err)=>
     #   console.log 'err',err
