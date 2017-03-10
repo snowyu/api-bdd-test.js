@@ -1,6 +1,7 @@
 Promise   = require 'bluebird'
 Yadda     = require 'yadda'
 chai      = require 'chai'
+chaiSubset= require 'chai-subset'
 path      = require 'path'
 firstline = require './first-line'
 appRoot   = require 'app-root-path'
@@ -10,6 +11,7 @@ isString  = require 'util-ex/lib/is/type/string'
 isFunction= require 'util-ex/lib/is/type/function'
 Platform  = require 'yadda/lib/Platform'
 
+chai.use(chaiSubset)
 platform  = Platform()
 container = platform.get_container()
 # expose assertion library

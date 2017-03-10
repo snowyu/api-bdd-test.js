@@ -53,7 +53,7 @@ module.exports = (aDictionary)->
     testScope = this.ctx
     isInclude = isInclude[2] is 'n'
     if isInclude
-      expect(testScope.result.body).to.be.include data
+      expect(testScope.result.body).to.be.containSubset data
     else
       expect(testScope.result.body).to.be.deep.equal data
 
@@ -132,7 +132,7 @@ module.exports = (aDictionary)->
         if aOp.slice(aOp.length-3) is 'key'
           myExpect.include.keys aValue
         else
-          myExpect.include aValue
+          myExpect.containSubset aValue
     return
 
   this.define /expect\s+(?:the\s+)(?:stored|kept|saved)\s+$string(?:\s+is|be|are|to)?\s+(not\s+)?(above|below|most|least|equa?l?|(?:include|contain)(?:\s+key)?|[><!]=|[<=>])[:]$object/, (aKey, aNot, aOp, aValue)->
@@ -156,7 +156,7 @@ module.exports = (aDictionary)->
         if aOp.slice(aOp.length-3) is 'key'
           myExpect.include.keys aValue
         else
-          myExpect.include aValue
+          myExpect.containSubset aValue
     return
 
   this.define /expect\s+((?:not\s+)?exist)(?:the\s+)?(?:stored|kept|saved)\s+$string/, (aExists, aKey)->

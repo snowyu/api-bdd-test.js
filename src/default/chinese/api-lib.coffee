@@ -122,7 +122,7 @@ module.exports = (aDictionary)->
   this.define /上次[的]?(?:结果|body)([为是]|包[括含]?)[：:]?\s*$object/, (isInclude, data)->
     testScope = this.ctx
     if isInclude[0] is '包'
-      expect(testScope.result.body).to.be.include data
+      expect(testScope.result.body).to.be.containSubset data
     else
       expect(testScope.result.body).to.be.deep.equal data
 
@@ -143,7 +143,6 @@ module.exports = (aDictionary)->
   this.define new RegExp('[获取拿得][取得到](?:id|ID|编号)[为是:：]?$string[,，]?\\s*过?滤?条件[为是:：]?$string的?资源\\s*'+resNameRegEx), (id, filter, resource)->
     testScope = this.ctx
     resource ?= this.resource
-    console.log id, filter, resource
     # return
     filter = JSON.stringify cson filter if isString(filter) and filter.length
     id = path.join(resource, encodeURIComponent id) if resource
@@ -234,7 +233,7 @@ module.exports = (aDictionary)->
         if aOp.slice(aOp.length-3) is 'key'
           myExpect.include.keys aValue
         else
-          myExpect.include aValue
+          myExpect.containSubset aValue
     return
 
   this.define /(?:记[住下忆]?|保[存留])的\s*$string\s*(不)?((?:大于|小于)等于|至[少多]|等于|是|包[含括](?:key)?|[><!]=|[<=>])[:：]$object/, (aKey, aNot, aOp, aValue)->
@@ -255,7 +254,7 @@ module.exports = (aDictionary)->
         if aOp.slice(aOp.length-3) is 'key'
           myExpect.include.keys aValue
         else
-          myExpect.include aValue
+          myExpect.containSubset aValue
     return
 
   this.define /(不?存在)(?:记[住下忆]?|保[存留]的)?\s*$string$/, (aExists, aKey)->
