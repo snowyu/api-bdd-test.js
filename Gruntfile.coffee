@@ -1,4 +1,4 @@
-coffee = require 'coffee-script'
+coffee = require 'coffeescript'
 
 module.exports = (grunt) ->
 

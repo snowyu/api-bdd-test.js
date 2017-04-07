@@ -1,7 +1,7 @@
 isObject  = require 'util-ex/lib/is/type/object'
 isArray   = require 'util-ex/lib/is/type/array'
 path      = require 'path'
-cs        = require 'coffee-script'
+cs        = require 'coffeescript'
 toQuery   = require '../to-query'
 
 module.exports = (aDictionary)->

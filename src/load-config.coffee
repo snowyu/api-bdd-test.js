@@ -1,6 +1,6 @@
 loadConfig = require 'load-config-file'
 yaml  = require 'js-yaml'
-cs    = require 'coffee-script'
+cs    = require 'coffeescript'
 
 # first search.
 loadConfig.register(['.yaml', '.yml'], yaml.safeLoad)

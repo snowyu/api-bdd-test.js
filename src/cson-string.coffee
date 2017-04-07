@@ -1,4 +1,4 @@
-cs          = require 'coffee-script'
+cs          = require 'coffeescript'
 vm          = require? 'vm'
 
 createContext = vm.Script.createContext ? vm.createContext
