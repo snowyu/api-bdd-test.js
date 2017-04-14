@@ -94,8 +94,12 @@ the genernal api steps:
 
 eg,
 
-```
+```cucumber
 Feature: Standard API Test
+
+@before
+Scenario: empty data before feature running
+  Given DELETE "bottle"
 
 Scenario: POST and Get result
 
