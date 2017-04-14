@@ -53,14 +53,14 @@ in the `test` folder.
 
 #### features
 
-tag with `@only` before the scenario to execute the scenario only.
-tag with `@pending` before the scenario to stop the scenario.
-tag with `@before` before the scenario to turn the scenario to a before feature hook.
-tag with `@after` before the scenario to turn the scenario to a after feature hook.
-tag with `@beforeEach` before the scenario to turn the scenario to a before each scenario hook.
-tag with `@afterEach` before the scenario to turn the scenario to a after each scenario hook.
-tag with `@beforeStep` before the scenario to turn the before each step hook.
-tag with `@afterStep` before the scenario to turn the after each step hook.
+* tag with `@only` before the scenario to execute the scenario only.
+* tag with `@pending` before the scenario to stop the scenario.
+* tag with `@before` before the scenario to turn the scenario to a before feature hook.
+* tag with `@after` before the scenario to turn the scenario to a after feature hook.
+* tag with `@beforeEach` before the scenario to turn the scenario to a before each scenario hook.
+* tag with `@afterEach` before the scenario to turn the scenario to a after each scenario hook.
+* tag with `@beforeStep` before the scenario to turn the before each step hook.
+* tag with `@afterStep` before the scenario to turn the after each step hook.
 
 ```cucumber
 @only
