@@ -113,7 +113,7 @@ module.exports = (aDictionary)->
   # expect the stored "mvar" equal xxx
   this.define /expect\s+(?:the\s+)(?:stored|kept|saved)\s+$string(?:\s+is|be|are|to)?\s+(not\s+)?(above|below|most|least|equa?l?|(?:include|contain)(?:\s+key)?|[><!]=|[<=>])\s*(.+)$/, (aKey, aNot, aOp, aValue)->
     aValue = cs.eval aValue
-    myExpect = expect(this.ctx[aKey]).to.be
+    myExpect = expect(aKey).to.be
     myExpect = myExpect.not if aNot?
     switch aOp
       when 'least', '>='
@@ -136,7 +136,7 @@ module.exports = (aDictionary)->
     return
 
   this.define /expect\s+(?:the\s+)(?:stored|kept|saved)\s+$string(?:\s+is|be|are|to)?\s+(not\s+)?(above|below|most|least|equa?l?|(?:include|contain)(?:\s+key)?|[><!]=|[<=>])[:]$object/, (aKey, aNot, aOp, aValue)->
-    myExpect = expect(this.ctx[aKey]).to.be
+    myExpect = expect(aKey).to.be
     myExpect = myExpect.not if aNot?
     switch aOp
       when 'least', '>='
