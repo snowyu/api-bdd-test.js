@@ -114,13 +114,21 @@ Scenario: POST and Get result
     a: 13
   ----
   Then The last status code should be: 200
-  Then The last status code should be not: 400
-  Then The last result should be:
+  And The last status code should be not: 400
+  And The last result should be:
   ----
   id: 10
   a: 13
   ----
+  And keep the result of "body.id" to "myid"
+  And keep the `result.body.id` to "myid1"
+  And keep the result to "myres"
+  And expect the stored `myid` equal 10
+  And expect the stored `myid1` equal 10
+  And expect the stored `myid` is not equal 0
+  And expect the kept `myid` least 1
 ```
+
 
 
 the genernal Chinese api steps:
