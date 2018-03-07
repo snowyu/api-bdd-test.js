@@ -209,6 +209,10 @@ module.exports = function(dict){
 
 ## History
 
+### V0.5.1
+
+* [Broken] the `resNameRegEx`(Chinese) force use limiter to get the identifier.
+
 ### V 0.4.0
 
 + Add Special Scenarios
