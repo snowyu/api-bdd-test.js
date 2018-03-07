@@ -129,14 +129,12 @@ Scenario: POST and Get result
   And expect the kept `myid` least 1
 ```
 
-
-
 the genernal Chinese api steps:
 
-* `[新创]建资源\\s*[:：]?[(（]?$identifier(?:[)）]?\\s*[,，.。])?[的其]?(?:内容|结果)[为是]?\\n$object`
-* `[编修][辑改](?:id|ID|编号)[为是:：]?$string的?资源\\s*'+res4DataRegEx`
-* `删[除掉](?:id|ID|编号)[为是:：]?$string的?资源\\s*[:：]?[(（]?$identifier(?:[)）]?\\s*[,，.。])?`
-* `检[查测]是否存在资源\\s*[:：]?[(（]?$identifier(?:[)）]?\\s*[,，.。])?\\s*[:：]?$string`
+* `新建资源:"resource",其内容为\n$object`
+* `编辑(ID|编号)是:"the-id"的资源:"resource",其内容为\n$object`
+* `删除(ID|编号)是:"the-id"的资源:"resource"`
+* `检[查测]是否存在资源\\s*[:：]?[(（ ]$identifier(?:[)） ]\\s*[,，.。])?\\s*[:：]?$string`
 * `/上次[的]?(?:状态[码]?|status)[为是：:]\s*$identifier/`
 * `/上次[的]?(?:结果|body)([为是：:]|包[括含][：:]?)\s*\n$object/`
 * `(?:获[取得]|取[得]?)(?:id|ID|编号)[为是:：]?$string的?资源\\s*[:：]?[(（]?$identifier(?:[)）]?\\s*[,，.。])?[的其]?(?:内容|结果)[为是]?\\n$object`
@@ -148,10 +146,10 @@ the genernal Chinese api steps:
 * `记住结果到"myvar"`
 * `保存的"mvar"等于xxx`
 * `/(不?存在)(?:记[住下忆]?|保[存留]的)?\s*$string$/`
-* `列[出举]资源\\s*[:：]?[(（]?$identifier(?:[)）]?\\s*[,，.。])?`
+* `列[出举]资源\\s*[:：]?[(（ ]$identifier(?:[)） ]\\s*[,，.。])?`
 * `[搜查][索询找]资源\\s*'+resNameRegEx+'按?(?:指定|如下)?(?:条件|设置)[:：]?$object`
-* 记住`result.body[0].id`到"myvar"
-* 获得id为"id",过滤条件为"xxx"的资源:bottle
+* ```记住`result.body[0].id`到"myvar"```
+* `获得id为"id",过滤条件为"xxx"的资源: bottle`
 
 #### steps and libs
 

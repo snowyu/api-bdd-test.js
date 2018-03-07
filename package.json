@@ -73,7 +73,7 @@
   },
   "peerDependencies": {
     "chai": "*",
-    "chai-subset":"*",
+    "chai-subset": "*",
     "loopback-supertest": ">=0.1.0",
     "supertest": ">=2.0.0"
   },

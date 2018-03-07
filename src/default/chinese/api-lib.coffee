@@ -9,7 +9,7 @@ module.exports = (aDictionary)->
   #console.log
   # 新建资源:ResName
   # a:1,b:2
-  resNameRegEx    = '[:：]?[(（‘\'“"]?$identifier[)）’”"\']?'
+  resNameRegEx    = '[:：]?[(（‘\'“" ]$identifier(?:[)），,.。’”"\' ]|$)'
   resResultRegEx  = '[的其]?(?:内容|结果)[为是]?[:：]?$object'
   res4DataRegEx   = resNameRegEx + '[,，.。]?\\s*'+ resResultRegEx
 
@@ -46,7 +46,7 @@ module.exports = (aDictionary)->
       testScope.result = err
       return err
 
-  this.define new RegExp('[新创]建资源\\s*'+resNameRegEx + '成功[,，.。]?\\s*'+ resResultRegEx), (resource, data)->
+  this.define new RegExp('[新创]建资源\\s*'+resNameRegEx+'成功[,，.。]?\\s*'+ resResultRegEx), (resource, data)->
     testScope = this.ctx
     resource ?= this.resource
     this.api.post resource, data:data

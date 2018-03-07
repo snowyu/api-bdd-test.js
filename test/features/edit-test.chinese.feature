@@ -13,7 +13,14 @@
     b: 2
     ----
 
-  假定 新建资源:bottle 内容为
+  假定 新建资源 bottle 成功,内容为
+    ----
+    id: 'create_23'
+    a: 1
+    b: 2
+    ----
+
+  假定 新建资源: bottle 内容为
     ----
     id: 'create1'
     a: 1
@@ -34,14 +41,14 @@
     ----
 
 场景: 修改瓶子
-  假定 存在新建资源:bottle 内容为
+  假定 存在新建资源: bottle 内容为
     ----
     id: 'modify1'
     a: 222
     b: 11
     ----
 
-  当 修改id为"modify1"的资源:bottle 内容为:
+  当 修改id为"modify1"的资源: bottle 内容为:
     ----
     a: 'A1'
     b: 'b1'
